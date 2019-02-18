@@ -64,7 +64,7 @@ public class HelloGame implements IGameLogic {
         float reflectance = 1f;        
         // NOTE: 
         //   please uncomment following lines to test your OBJ Loader.
-        Mesh mesh = OBJLoader.loadMesh("bunny.obj");
+        Mesh mesh = OBJLoader.loadMesh("cube3.obj");
         //Mesh mesh = new Mesh();  // comment this line when you enable OBJLoader
         Material material = new Material(new Vector3f(0.2f, 0.5f, 0.5f), reflectance);
         

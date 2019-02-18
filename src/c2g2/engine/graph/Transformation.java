@@ -21,6 +21,14 @@ public class Transformation {
     public final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar) {
         projectionMatrix.identity();
         //// --- student code ---
+        projectionMatrix.m00(2.0f/width);
+        projectionMatrix.m11(2.0f/height);
+        projectionMatrix.m33(2.0f/(zFar-zNear));
+        projectionMatrix.m33(2.0f/(zFar-zNear));
+        
+        
+        
+        
         
         return projectionMatrix;
     }

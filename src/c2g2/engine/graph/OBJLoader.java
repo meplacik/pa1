@@ -34,13 +34,11 @@ public class OBJLoader {
         try{
         	reader = new BufferedReader(new FileReader(
         	"/Users/Maddy/Documents/Graphics/pa1/src/resources/models/" + fileName));
-		
 			//int count=0;
 			String line = reader.readLine();
 			while( line != null ) {
-				
-				
-				String[] parse = line.split(" ");
+				//split line with whitespaces
+				String[] parse = line.split("\\s+");
 				//System.out.println(parse[0]);
 				//position
 				if ( parse[0].equals("v") ) {
@@ -53,28 +51,43 @@ public class OBJLoader {
 					}
 				}
 				//norms
-				else if (parse[0].equals("vn")){
+				else if ( parse[0].equals("vn") ){
 					for(int i=0 ; i<3; i++){
 						no.add(Float.valueOf(parse[i+1]));
 						//norms[count+i] = Float.valueOf(parse[i+1]);
 					}
 				}
 				//textCoords
-				else if (parse[0].equals("vt")){
+				else if ( parse[0].equals("vt") ){
 					for(int i=0 ; i<2; i++){
 						text.add(Float.valueOf(parse[i+1]));
 						//norms[count+i] = Float.valueOf(parse[i+1]);
 					}
 				}
 				//indices
-				else if(parse[0].equals("f")){
+				else if( parse[0].equals("f") ){
 					//get first number
-					for(int i=0 ; i<3; i++){
-						String[] numString = parse[i+1].split("//");
-						int num = Integer.parseInt(numString[0]);
-						ind.add(num);
-						//indices[count+i] = num;
-					}        		
+					//if line contains "//"
+					if( parse[1].contains("//") ){
+						for(int i=0 ; i<3; i++){
+							String[] numString = parse[i+1].split("//");
+							int num = Integer.parseInt(numString[0]);
+							ind.add(num);
+						}
+					}
+					else if( parse[1].contains("/")){
+						for(int i=0 ; i<3; i++){
+							String[] numString = parse[i+1].split("/");
+							int num = Integer.parseInt(numString[0]);
+							ind.add(num);
+						}
+					}
+					else{
+						for(int i=0 ; i<3; i++){
+							ind.add(Integer.parseInt(parse[i+1]));
+						}
+					
+					}   		
 				}
 			
 				//count = count+3;
@@ -114,7 +127,11 @@ public class OBJLoader {
 			l++;
 		}
 		
-		//System.out.println(Arrays.toString(positions));
+		System.out.println("pos: " + positions[0] + positions[1] + positions[2] );
+		System.out.println("txt: " + textCoords[0] + textCoords[1] +textCoords[2] );
+		System.out.println("ind" + indices[0]+" "+indices[1]+" "+indices[2]);
+		System.out.println("norms: " + norms[0]+norms[1]+norms[2]);
+		
         return new Mesh(positions, textCoords, norms, indices);
     }
 

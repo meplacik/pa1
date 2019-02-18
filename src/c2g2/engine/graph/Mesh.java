@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import org.joml.Matrix4f;
 
+import java.lang.*;
 
 import java.io.Serializable.*;
 
@@ -210,12 +211,12 @@ public class Mesh {
     	//Do not change textco, norms, inds
     	//student code
 		//float[] components = new float[3];
-		Matrix4f matrix = new Matrix4f();//create 4x4 matrix
-		setIdentity(matrix); //set it to be the identity matrix
+		//Matrix4f matrix = new Matrix4f();//create 4x4 matrix
+		//setIdentity(matrix); //set it to be the identity matrix
 		
 		//trans.get(components);
 		
-		matrix.translation(trans.x(),trans.y(),trans.z());//translate(vec3,source,destination)
+		//matrix.translation(trans.x(),trans.y(),trans.z());//translate(vec3,source,destination)
     	
     	for(int i=0; i< pos.length/3; i++){
     		//make 3d vector of positions
@@ -229,7 +230,9 @@ public class Mesh {
 			//create matrix with components to be transformed
 			//temp.set(oldCoords);
 			Matrix4f newMatrix = new Matrix4f();
-			newMatrix = matrix.mul(temp);
+			newMatrix = temp.translation(trans.x(),trans.y(),trans.z());
+			
+			//newMatrix = matrix.mul(temp);
 			
 			//newMatrix = matrix*temp; //transformed matrix
 			pos[(i*3)+0] = newMatrix.m03();
@@ -246,9 +249,9 @@ public class Mesh {
     	//Do not change textco, norms, inds
     	//student code
     	
-    	Matrix4f matrix = new Matrix4f();
-    	setIdentity(matrix);
-    	matrix.rotate(angle,axis,matrix);
+    	//Matrix4f matrix = new Matrix4f();
+    	//setIdentity(matrix);
+    	//matrix.rotate(angle,axis,matrix);
         	
     	for(int i=0; i< pos.length/3; i++){
     		//Vector3f oldCoords = new Vector3f(pos[(i*3)+0],pos[(i*3)+1],pos[(i*3)+2]);
@@ -258,7 +261,11 @@ public class Mesh {
     		oldMatrix.m13(pos[(i*3)+1]);
     		oldMatrix.m23(pos[(i*3)+2]);
     		Matrix4f newMatrix = new Matrix4f();
-    		newMatrix = matrix.mul(oldMatrix);
+    		float rad = ((angle*3.14f)/(180.0f));
+    		oldMatrix.rotate(rad,axis,newMatrix);
+    		
+    		//newMatrix = matrix.mul(oldMatrix);
+    		
     		pos[(i*3)+0] = newMatrix.m03();
 			pos[(i*3)+1] = newMatrix.m13();
 			pos[(i*3)+2] = newMatrix.m23();
@@ -272,8 +279,18 @@ public class Mesh {
     	//reset position of each point
     	//Do not change textco, norms, inds
     	//student code
+    	
     	for(int i=0; i< pos.length/3; i++){
-    		
+    		Matrix4f oldMatrix = new Matrix4f();
+    		setIdentity(oldMatrix);
+    		oldMatrix.m03(pos[(i*3)+0]);
+    		oldMatrix.m13(pos[(i*3)+1]);
+    		oldMatrix.m23(pos[(i*3)+2]);
+    		Matrix4f newMatrix = new Matrix4f();
+    		newMatrix = oldMatrix.reflect(n.x(),n.y(),n.z(),p.x(),p.y(),p.z());
+    		pos[(i*3)+0] = newMatrix.m03();
+    		pos[(i*3)+1] = newMatrix.m13();
+    		pos[(i*3)+2] = newMatrix.m23();
     	}
     	setMesh(pos, textco, norms, inds);
     }
